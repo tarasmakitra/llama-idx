@@ -49,6 +49,20 @@ poetry run streamlit run src/3-web-app.py
 
 Open the provided URL in your browser to view and interact with the candidate list.
 
+## Debugging
+
+1. **Enable Debug Mode**
+
+   To enable debug mode call `enable_debug_mode()` at the top of the file.
+
+2. **Start Phoenix UI**
+
+   Run the following command to launch the Phoenix tracing dashboard:
+
+   ```bash
+   poetry run phoenix serve
+   ```
+
 ## Project Structure
 
 - `src/1-embeddings.py` — Downloads data, generates embeddings, extracts candidate details.

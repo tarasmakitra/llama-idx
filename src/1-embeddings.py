@@ -1,7 +1,6 @@
 import json
 import os
 import shutil
-
 import kagglehub
 from llama_index.core import (
     Document,
@@ -16,14 +15,15 @@ from data import data_input_dir, read_directory, extract_json_from_text
 from database import (
     create_candidates_table,
     save_candidate_details,
-)
-from database import (
     create_database,
     get_pg_vector_store,
 )
-from models import context_persist_dir
-from models import llm, embed_model
+from schema import Candidate
+from models import llm, embed_model, context_persist_dir
 from prompts import details_prompt
+from debug import enable_debug_mode
+
+# enable_debug_mode()
 
 
 def download_dataset(destination_path: str) -> None:
@@ -61,9 +61,30 @@ def generate_embeddings(documents: list[Document]) -> None:
     index.storage_context.persist(persist_dir=context_persist_dir)
 
 
-def retrieve_details(doc: Document):
+def retrieve_details_with_prompt(doc: Document):
     file_name = doc.metadata.get("file_name")
     response = llm.complete(details_prompt.format(text=doc.text))
+
+    print(f"llm response for {file_name}:", response)
+
+    try:
+        data = json.loads(extract_json_from_text(str(response)))
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse JSON for {file_name}: {e}")
+        data = {}
+
+    data["file_name"] = file_name
+
+    save_candidate_details(data)
+
+    print("Done parsing", file_name)
+
+
+def retrieve_details_with_structured_llm(doc: Document):
+    file_name = doc.metadata.get("file_name")
+    sllm = llm.as_structured_llm(Candidate)
+
+    response = sllm.complete(doc.text)
 
     print(f"llm response for {file_name}:", response)
 
@@ -91,6 +112,7 @@ if __name__ == "__main__":
     # 5. Extract details from each document
     create_candidates_table()
     for document in documents:
-        retrieve_details(document)
+        # retrieve_details_with_prompt(document)
+        retrieve_details_with_structured_llm(document)
 
     print("Done!")
