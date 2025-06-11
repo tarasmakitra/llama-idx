@@ -26,25 +26,17 @@ poetry install
 
 ### 1. Download and process resumes
 
-Run the embedding and details extraction script:
+Generates embeddings and extracts details and summary:
 ```bash
-poetry run python src/1-embeddings.py
+poetry run python src/main.py
 ```
 
-### 2. Generate summaries
-
-Run the summary generation script:
-
-```bash
-poetry run python src/2-summary.py
-```
-
-### 3. Start the web application
+### 2. Start the web application
 
 Launch the Streamlit app:
 
 ```bash
-poetry run streamlit run src/3-web-app.py
+poetry run streamlit run src/web-app.py
 ```
 
 Open the provided URL in your browser to view and interact with the candidate list.
@@ -65,6 +57,5 @@ Open the provided URL in your browser to view and interact with the candidate li
 
 ## Project Structure
 
-- `src/1-embeddings.py` — Downloads data, generates embeddings, extracts candidate details.
-- `src/2-summary.py` — Generates summaries for each candidate.
-- `src/3-web-app.py` — Streamlit web interface for browsing candidates.
+- `src/main.py` — Downloads data, generates embeddings, extracts candidate details and summaries.
+- `src/web-app.py` — Streamlit web interface for browsing candidates.

@@ -1,14 +1,12 @@
 import json
 import os
 import shutil
+
 import kagglehub
 from llama_index.core import (
     Document,
-    VectorStoreIndex,
 )
-from llama_index.core import (
-    StorageContext,
-)
+from llama_index.core import StorageContext, VectorStoreIndex
 from llama_index.core.node_parser import SentenceSplitter
 
 from data import data_input_dir, read_directory, extract_json_from_text
@@ -16,12 +14,14 @@ from database import (
     create_candidates_table,
     save_candidate_details,
     create_database,
-    get_pg_vector_store,
 )
-from schema import Candidate
+from database import get_pg_vector_store, update_candidate_summary
 from models import llm, embed_model, context_persist_dir
 from prompts import details_prompt
-from debug import enable_debug_mode
+from prompts import summary_prompt
+from schema import Candidate
+from vector_index import get_persisted_vector_index, get_candidate_query_engine
+
 
 # enable_debug_mode()
 
@@ -86,7 +86,7 @@ def retrieve_details_with_structured_llm(doc: Document):
 
     response = sllm.complete(doc.text)
 
-    print(f"llm response for {file_name}:", response)
+    print(f"candidate's details from {file_name}:", response)
 
     try:
         data = json.loads(extract_json_from_text(str(response)))
@@ -98,7 +98,13 @@ def retrieve_details_with_structured_llm(doc: Document):
 
     save_candidate_details(data)
 
-    print("Done parsing", file_name)
+
+def retrieve_candidate_summary(index: VectorStoreIndex, document: Document) -> None:
+    file_name = document.metadata.get("file_name")
+    query_engine = get_candidate_query_engine(index, file_name)
+    summary = query_engine.query(summary_prompt)
+    update_candidate_summary(file_name, str(summary))
+    print(f"candidate's summary from {file_name}:", summary)
 
 
 if __name__ == "__main__":
@@ -108,11 +114,21 @@ if __name__ == "__main__":
     # 2-4. Generate embeddings and store in vector database
     documents = read_directory(input_dir=data_input_dir, num_files_limit=20)
     generate_embeddings(documents)
+    print("Done generating embeddings")
 
     # 5. Extract details from each document
     create_candidates_table()
     for document in documents:
         # retrieve_details_with_prompt(document)
         retrieve_details_with_structured_llm(document)
+
+    print("Done extracting details")
+
+    # 6. Generate experience summary
+    index = get_persisted_vector_index()
+    for document in documents:
+        retrieve_candidate_summary(index, document)
+
+    print("Done extracting summary")
 
     print("Done!")
