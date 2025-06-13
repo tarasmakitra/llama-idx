@@ -53,7 +53,7 @@ def get_pg_vector_store(table_name: str = "embeddings"):
         user=db_user,
         password=db_password,
         table_name=table_name,
-        embed_dim=768,  # nomic=768, openai=1536
+        embed_dim=1536,  # nomic=768, openai=1536
         hnsw_kwargs={
             "hnsw_m": 16,
             "hnsw_ef_construction": 64,

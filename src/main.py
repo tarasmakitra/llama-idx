@@ -14,16 +14,19 @@ from database import (
     create_candidates_table,
     save_candidate_details,
     create_database,
+    get_pg_vector_store,
+    update_candidate_summary,
 )
-from database import get_pg_vector_store, update_candidate_summary
 from models import llm, embed_model, context_persist_dir
-from prompts import details_prompt
-from prompts import summary_prompt
+from prompts import details_prompt, summary_prompt
 from schema import Candidate
 from vector_index import get_persisted_vector_index, get_candidate_query_engine
+from dotenv import load_dotenv
 
-
+load_dotenv()
 # enable_debug_mode()
+
+cv_num_files_limit = int(os.getenv("NUM_FILES_LIMIT", 20))
 
 
 def download_dataset(destination_path: str) -> None:

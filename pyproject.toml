@@ -6,33 +6,26 @@ authors = [
     {name = "Taras Makitra",email = "makitrataras@gmail.com"}
 ]
 readme = "README.md"
+package-mode = false
 requires-python = ">=3.9,<3.9.7 || >3.9.7,<3.14"
 dependencies = [
     "llama-index (>=0.12.40,<0.13.0)",
     "python-dotenv (>=1.1.0,<2.0.0)",
-    "llama-index-readers-web (>=0.4.1,<0.5.0)",
-    "pinecone (>=7.0.2,<8.0.0)",
     "llama-index-readers-file (>=0.4.8,<0.5.0)",
     "llama-index-vector-stores-postgres (>=0.5.3,<0.6.0)",
-    "llama-index-llms-ollama (>=0.6.1,<0.7.0)",
-    "beautifulsoup4 (>=4.13.4,<5.0.0)",
-    "trafilatura (>=2.0.0,<3.0.0)",
-    "sqlalchemy (>=2.0.41,<3.0.0)",
+#    "llama-index-llms-ollama (>=0.6.1,<0.7.0)",
     "psycopg2 (>=2.9.10,<3.0.0)",
-    "llama-index-embeddings-ollama (>=0.6.0,<0.7.0)",
+#    "llama-index-embeddings-ollama (>=0.6.0,<0.7.0)",
     "kaggle (>=1.7.4.5,<2.0.0.0)",
     "kagglehub[pandas-datasets] (>=0.3.12,<0.4.0)",
-    "pdfplumber (>=0.11.6,<0.12.0)",
     "streamlit (>=1.45.1,<2.0.0)",
     "arize-phoenix (>=10.10.0,<11.0.0)",
     "arize-phoenix-otel (>=0.10.3,<0.11.0)",
     "openinference-instrumentation-llama-index (>=4.3.0,<5.0.0)",
-    "llama-index-tools-wikipedia (>=0.3.0,<0.4.0)",
     "llama-index-tools-yahoo-finance (>=0.3.0,<0.4.0)"
 ]
 
 [tool.poetry]
-packages = [{include = "llama2", from = "src"}]
 
 
 [tool.poetry.group.dev.dependencies]
