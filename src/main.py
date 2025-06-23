@@ -112,7 +112,7 @@ def retrieve_candidate_summary(index: VectorStoreIndex, document: Document) -> N
 
 if __name__ == "__main__":
     # 1. Download CV files
-    download_dataset(data_input_dir)
+    # download_dataset(data_input_dir)
 
     # 2-4. Generate embeddings and store in vector database
     documents = read_directory(input_dir=data_input_dir, num_files_limit=20)

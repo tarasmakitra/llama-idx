@@ -5,7 +5,7 @@ from llama_index.core import (
     Document,
 )
 
-data_input_dir = "../data/csv"
+data_input_dir = "../dataset/ENGINEERING"
 
 
 def read_directory(
