@@ -1,11 +1,13 @@
 import json
+import os
 import re
 from llama_index.core import (
     SimpleDirectoryReader,
     Document,
 )
 
-data_input_dir = "../dataset/ENGINEERING"
+current_dir = os.path.dirname(os.path.abspath(__file__))
+data_input_dir = os.path.join(current_dir, "..", "dataset", "ENGINEERING")
 
 
 def read_directory(
