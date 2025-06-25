@@ -14,9 +14,6 @@ candidate_names = [
     f"{name or "Name Not Found"} ({file_name})" for file_name, name, _, _ in candidates
 ]
 
-st.text(f"DATABASE_URL: {os.environ.get('DATABASE_URL')}")
-st.text(f"OPENAI_API_KEY: {os.environ.get('OPENAI_API_KEY')}")
-
 selected = st.selectbox("Select a candidate:", candidate_names)
 
 if selected:
